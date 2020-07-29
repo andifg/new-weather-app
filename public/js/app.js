@@ -1,41 +1,74 @@
 console.log('Client side javascript file loaded .test')
 
 
+const LocationInput = document.getElementById('LocationInput')
 
-const weatherForm = document.querySelector('form')
-const search = document.querySelector('input')
 // Reference to an ID is done by # 
-const messageone = document.querySelector('#message-one')
-const messagetwo = document.querySelector('#message-two')
+const currentweather = document.querySelector('#current-weather')
+const dailyweather = document.querySelector('#daily-weather')
+const locationn = document.querySelector('#location')
+const currenttemp = document.querySelector('#currenttemp')
+const rainprob = document.querySelector('#rainprob')
+const tempmax = document.querySelector('#tempmax')
+const tempmaxtime = document.querySelector('#tempmaxtime')
+const tempmin = document.querySelector('#tempmin')
+const tempmintime = document.querySelector('#tempmintime')
 
 // messageone.textContent = 'From Javascript'
 
-weatherForm.addEventListener('submit', (e) => {
-    // e.preventDefault prevents page from constantly reloading after something is submitted into the input field
-    e.preventDefault()
-    const location = search.value
+document.getElementById('submitbutton').addEventListener('click',function(){
 
-    messageone.textContent = 'Loading ...'
-    messagetwo.textContent = ''
+    console.log(LocationInput.value)
 
 
 
-    fetch('/weather?adress=' + location).then((response) => {
+fetch('/weather?adress=' + LocationInput.value).then((response) => {
 
-        response.json().then((data) => {
-            if (data.error) {
-                messageone.textContent = data.error
-                messagetwo.textContent = ''
-            } else {
-                messageone.textContent = data.location
-                messagetwo.textContent = data.forecast
-            }
-        })
+    document.getElementById("summary").style.visibility = "visible";
+    document.getElementById("cards").style.visibility = "visible";
+    
 
+
+    response.json().then((data) => {
+        if (data.error) {
+            locationn.textContent = data.error
+            clearrest()
+           
+        } else {
+            console.log(data)
+            locationn.textContent = data.location
+            currentweather.textContent = data.forecast.current
+            dailyweather.textContent = data.forecast.daily
+            currenttemp.textContent = data.forecast.currenttemp
+            rainprob.textContent = data.forecast.rainprob
+            tempmax.textContent = data.forecast.tempmax
+            tempmaxtime.textContent = data.forecast.tempmaxtime
+            tempmin.textContent = data.forecast.tempmin
+            tempmintime.textContent = data.forecast.tempmintime
+        }
     })
+
+})
+
+
+
 
 
 
 
 
 })
+
+
+const clearrest = ()=>{
+    currentweather.textContent = ''
+    dailyweather.textContent = ''
+    currenttemp.textContent = ''
+    rainprob.textContent = ''
+    tempmax.textContent = ''
+    tempmaxtime.textContent = ''
+    tempmin.textContent = ''
+    tempmintime.textContent = ''
+
+
+}
